@@ -12,8 +12,7 @@ transfer_dict = {
     "кота": "ко-та",
     "тест": "тест",
     "один": "о-дин",
-    "привіт": "при-віт"
-}
+    "привіт": "при-віт"}
 
 def transfer_word(word):
     word = word.lower()
@@ -21,7 +20,7 @@ def transfer_word(word):
         return transfer_dict[word]
     else:
         vowels = "аеиіїоуюяєю"
-        word = re.sub(r"([а-яіїєґ])\1+", r"\1", word)
+        word = re.sub(r"([а-яіїєґ])\1+", r"\1", word) # Видаляє повторення приголосних
         parts = []
         current_part = ""
         for char in word:
@@ -33,7 +32,7 @@ def transfer_word(word):
             parts.append(current_part)
         return "-".join(parts)
 
-def transfer_text(text): 
+def transfer_text(text):
     try:
         if not text:
             raise ValueError("Введіть текст")
@@ -72,17 +71,27 @@ test_texts = [
     "Це короткий тест. Один кота. Привіт!"
 ]
 
+test_index = 0
+
 def run_tests():
-    for i, text in enumerate(test_texts):
-        print(f"\n--- Тест {i+1} ---")
+    global test_index
+    if test_index < len(test_texts):
+        text = test_texts[test_index]
+        input_text.delete("1.0", tk.END)
+        input_text.insert(tk.END, text)  # Вставляємо тестовий текст у поле вводу
+        print(f"\n--- Тест {test_index + 1} ---")
         print(f"Текст: {text}")
         transfer_text(text)
         root.update()
-        input("Натисніть Enter для наступного тесту...")
+        test_index += 1
+    else:
+        print("\nТестування завершено.")
 
 run_tests_button = tk.Button(root, text="Запустити тести", command=run_tests)
 run_tests_button.pack(pady=5)
 
-root.mainloop()
+instruction_label = tk.Label(root, text="Натисніть кнопку \"Запустити тести\", потім Enter для кожного тесту.")
+instruction_label.pack(pady=5)
 
+root.mainloop()
 
